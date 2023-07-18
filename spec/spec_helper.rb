@@ -1,15 +1,15 @@
-File.file?('./app.rb') ? require('./app.rb') : nil
-File.file?('./config/environment.rb') ? require('./config/environment.rb') : nil
-require 'capybara/dsl'
+File.file?("./app.rb") ? require("./app.rb") : nil
+File.file?("./config/environment.rb") ? require("./config/environment.rb") : nil
+require "capybara/dsl"
 require "draft_matchers"
 require "rspec-html-matchers"
 require "capybara/rspec"
-require "#{File.expand_path('../support/json_output_formatter', __FILE__)}"
-require "#{File.expand_path('../support/hint_formatter', __FILE__)}"
-require "#{File.expand_path('../support/headless_chrome', __FILE__)}"
+require "#{File.expand_path("../support/json_output_formatter", __FILE__)}"
+require "#{File.expand_path("../support/hint_formatter", __FILE__)}"
+require "#{File.expand_path("../support/headless_chrome", __FILE__)}"
 
 # setup for hints
-require 'i18n'
+require "i18n"
 I18n.load_path += Dir[File.expand_path("../support", __FILE__) + "/*.yml"]
 I18n.default_locale = :en # (note that `en` is already the default!)
 
@@ -20,20 +20,21 @@ set :environment, :test
 def app
   Sinatra::Application
 end
+
 Capybara.app = Sinatra::Application
 
 # setup for API testing
-require 'webmock/rspec'
+require "webmock/rspec"
 path_to_file = Dir.pwd + "/spec/support/currency_symbols.json"
 api_response = open(path_to_file).read.chomp
 RSpec.configure do |config|
   config.before(:each) do
     stub_request(:get, /api.exchangerate.host\/symbols/).
-      with(headers: {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+      with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" }).
       to_return(status: 200, body: api_response, headers: {})
 
     stub_request(:get, /api.exchangerate.host\/symbols/).
-      with(headers: {'Connection'=>'close', 'Host'=>'api.exchangerate.host', 'User-Agent'=>"http.rb/#{HTTP::VERSION}"}).
+      with(headers: { "Connection" => "close", "Host" => "api.exchangerate.host", "User-Agent" => "http.rb/#{HTTP::VERSION}" }).
       to_return(status: 200, body: api_response, headers: {})
   end
 end
@@ -42,19 +43,19 @@ cup_to_svc = open(path_to_file).read.chomp
 RSpec.configure do |config|
   config.before(:each) do
     stub_request(:get, /api.exchangerate.host\/convert/).
-      with(headers: {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+      with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" }).
       to_return(status: 200, body: cup_to_svc, headers: {})
 
     stub_request(:get, /api.exchangerate.host\/latest/).
-      with(headers: {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+      with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" }).
       to_return(status: 200, body: cup_to_svc, headers: {})
 
     stub_request(:get, /api.exchangerate.host\/convert/).
-      with(headers: {'Connection'=>'close', 'Host'=>'api.exchangerate.host', 'User-Agent'=>"http.rb/#{HTTP::VERSION}"}).
+      with(headers: { "Connection" => "close", "Host" => "api.exchangerate.host", "User-Agent" => "http.rb/#{HTTP::VERSION}" }).
       to_return(status: 200, body: cup_to_svc, headers: {})
 
     stub_request(:get, /api.exchangerate.host\/latest/).
-      with(headers: {'Connection'=>'close', 'Host'=>'api.exchangerate.host', 'User-Agent'=>"http.rb/#{HTTP::VERSION}"}).
+      with(headers: { "Connection" => "close", "Host" => "api.exchangerate.host", "User-Agent" => "http.rb/#{HTTP::VERSION}" }).
       to_return(status: 200, body: cup_to_svc, headers: {})
   end
 end
@@ -83,6 +84,7 @@ RSpec.configure do |config|
   def h(hint_identifiers)
     hint_identifiers.split.map { |identifier| I18n.t("hints.#{identifier}") }
   end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -113,8 +115,8 @@ RSpec.configure do |config|
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
 =begin
   # This allows you to limit a spec run to individual examples or groups
   # you care about by tagging them with `:focus` metadata. When nothing
