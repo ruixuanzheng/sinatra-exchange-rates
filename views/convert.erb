@@ -1,0 +1,13 @@
+
+<h1>Convert <%= @k %></h1>
+<p>Go <a href="/">back</a>.</p>
+
+<ul>
+<% @mh.each do |keys, values|%>
+    <li>
+      <a href="/<%= @k %>/<%= keys %>">
+        Convert 1 <%= @k %> to <%= keys %>...
+      </a>
+    </li>
+<% end %>
+</ul>
